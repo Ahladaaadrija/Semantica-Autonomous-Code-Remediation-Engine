@@ -18,4 +18,4 @@ def _remediated__remediated_log_transaction_block_block(AttributeError, Exceptio
                     status = 'failed_commit'
         except AttributeError:
             status = 'corrupt_data'
-    return (item, status
+    return (item, status)
