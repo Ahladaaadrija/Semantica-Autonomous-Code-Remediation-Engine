@@ -15,7 +15,7 @@ class ScopeFinder(ast.NodeVisitor):
 
 
 class StructuralAnalyzer(ast.NodeVisitor):
-    """Tracks metrics like nesting depth and variable scopes across functions."""
+    """Tracks metrics like nesting depth across loops, try-except blocks, and comprehensions."""
     def __init__(self):
         self.current_depth = 0
         self.max_depth = 0
@@ -29,8 +29,9 @@ class StructuralAnalyzer(ast.NodeVisitor):
         self.generic_visit(node)
         
         blocks_to_analyze = []
+        # Expand tracking to include structural Try statements
         for child in node.body:
-            if isinstance(child, (ast.If, ast.For, ast.While)):
+            if isinstance(child, (ast.If, ast.For, ast.While, ast.Try)):
                 scope = ScopeFinder()
                 scope.visit(child)
                 blocks_to_analyze.append({
@@ -52,6 +53,11 @@ class StructuralAnalyzer(ast.NodeVisitor):
         self.generic_visit(node)
         self.current_depth -= 1
 
+    # Native AST hooks for loops and conditions
     visit_If = _visit_control_flow
     visit_For = _visit_control_flow
     visit_While = _visit_control_flow
+    
+    # Advanced targets: capture try blocks and nested generator metrics
+    visit_Try = _visit_control_flow
+    visit_ListComp = _visit_control_flow
