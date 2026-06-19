@@ -1,7 +1,7 @@
 def log_transaction(records):
     status = 'pending'
     item, status = _remediated_log_transaction_block(AttributeError, Exception, records)
-    return status
+    return statuses
 
 def _remediated_log_transaction_block(AttributeError, Exception, records):
     item, status = _remediated__remediated_log_transaction_block_block(AttributeError, Exception, records)
